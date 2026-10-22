@@ -1,65 +1,49 @@
-# 🔐 Password Entropy Visualizer
+# Password Entropy Visualizer
 
-A real-time password strength analyzer that uses **information theory** (entropy calculation) instead of simple rule-based checks. Calculates crack time based on modern attack scenarios.
+A browser-based password estimator that displays an entropy estimate, a strength category, character-set information, pattern warnings, recommendations, and an illustrative cracking-time estimate.
 
-🌐 **Live:** [password-entropy-visualizer.vercel.app](https://password-entropy-visualizer.vercel.app)
+**Demo:** [password-entropy-visualizer.vercel.app](https://password-entropy-visualizer.vercel.app/)
 
-![Demo](./screenshot.png)
+## Features
 
-## ✨ Features
+- Calculates a simplified entropy estimate from password length and detected character-set size.
+- Estimates cracking time using a fixed reference rate of 10 billion guesses per second.
+- Flags repeated characters, selected sequential patterns, and common password fragments.
+- Suggests ways to improve a password, such as increasing length and avoiding predictable patterns.
+- Lets users toggle password visibility while testing.
 
-- 🧮 **Real-time Entropy Calculation** - Uses formula: `Entropy = L × log₂(R)`
-- ⚡ **Crack Time Estimation** - Based on 10 billion hashes/second attack scenario
-- 🔍 **Pattern Detection** - Identifies weak patterns:
-  - Repeating characters (aaa, 111)
-  - Sequential patterns (123, abc)
-  - Common passwords (password, admin)
-- 💡 **Actionable Recommendations** - Specific suggestions to improve password strength
-- 🎨 **Beautiful UI** - Smooth animations with Motion + Lucide icons
+## Technology
 
-## 🛠️ Tech Stack (2026 Edition)
+- Next.js App Router
+- React and TypeScript
+- Tailwind CSS
+- Motion
+- Lucide React
 
-| Layer      | Technology              |
-| ---------- | ----------------------- |
-| Framework  | Next.js 16 (App Router) |
-| Language   | TypeScript              |
-| Styling    | Tailwind CSS v4         |
-| Icons      | **Lucide React**        |
-| Animation  | **Motion**              |
-| Deployment | Vercel                  |
+## Run locally
 
-## 📊 How It Works
-
-### Character Set Sizes
-
-| Character Set         | Size (R) | Examples            |
-| --------------------- | -------- | ------------------- |
-| Lowercase only        | 26       | `a-z`               |
-| Lowercase + Uppercase | 52       | `a-z, A-Z`          |
-| + Numbers             | 62       | `a-z, A-Z, 0-9`     |
-| + Symbols             | 95       | All printable ASCII |
-
-### Strength Levels
-
-| Entropy    | Strength       | Typical Crack Time |
-| ---------- | -------------- | ------------------ |
-| < 40 bits  | 😰 Weak        | Instant - minutes  |
-| 40-60 bits | 😐 Fair        | Hours - days       |
-| 60-80 bits | 💪 Strong      | Years              |
-| 80+ bits   | 🛡️ Very Strong | Centuries+         |
-
-## 🚀 Getting Started
+Install Node.js and npm, then run:
 
 ```bash
-# Clone repository
 git clone https://github.com/ridhorezkyanwar/password-entropy-visualizer.git
 cd password-entropy-visualizer
-
-# Install dependencies
 npm install
-
-# Run development server
 npm run dev
-
-### Entropy Formula
 ```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## Useful commands
+
+```bash
+npm run lint
+npm run build
+```
+
+These commands use the scripts defined in `package.json`; whether they pass depends on the local environment and current code.
+
+## Important limitations
+
+This is an educational estimate, not a guarantee of real-world password strength. The formula assumes characters are selected from the detected character set in a way that can be modelled as random; manually chosen passwords often have less entropy than the estimate suggests. Actual cracking time varies with the hashing algorithm, attack method, hardware, and rate limits.
+
+The current analyzer runs in the browser component and does not send the entered password to an application API. For demonstrations, use a sample password rather than a password you use for a real account.
