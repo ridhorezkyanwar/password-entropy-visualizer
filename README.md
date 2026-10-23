@@ -1,39 +1,36 @@
 # Password Entropy Visualizer
 
-<p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=18&duration=2600&pause=850&color=58A6FF&center=true&vCenter=true&width=520&lines=Build+%E2%80%A2+Test+%E2%80%A2+Improve" alt="Animated banner: Build, Test, Improve" />
+> An educational, browser-based view of password-strength estimates and their assumptions.
+
+<p>
+  <a href="https://password-entropy-visualizer.vercel.app/"><img src="https://img.shields.io/badge/Live_Demo-Vercel-black?style=for-the-badge&logo=vercel" alt="Live demo" /></a>
+  <img src="https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=nextdotjs&logoColor=white" alt="Next.js 16" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Motion-FF4154?style=flat-square" alt="Motion" />
 </p>
-<p align="center">
-  <img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white" alt="Next.js badge" />
-  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript badge" />
-  <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS badge" />
-  <img src="https://img.shields.io/badge/Motion-FF4154?style=flat-square" alt="Motion badge" />
-</p>
 
-
-A browser-based password estimator that displays an entropy estimate, a strength category, character-set information, pattern warnings, recommendations, and an illustrative cracking-time estimate.
-
-**Demo:** [password-entropy-visualizer.vercel.app](https://password-entropy-visualizer.vercel.app/)
+This app estimates password entropy from its length and detected character set, then visualizes a strength category, pattern warnings, suggestions, and an illustrative cracking-time estimate.
 
 ## Features
 
-- Calculates a simplified entropy estimate from password length and detected character-set size.
-- Estimates cracking time using a fixed reference rate of 10 billion guesses per second.
-- Flags repeated characters, selected sequential patterns, and common password fragments.
-- Suggests ways to improve a password, such as increasing length and avoiding predictable patterns.
-- Lets users toggle password visibility while testing.
+- Estimates entropy in bits using a simplified character-set model.
+- Shows the password length and detected character-set size.
+- Flags selected repeated, sequential, and common-fragment patterns.
+- Suggests improvements such as increasing length and avoiding predictable patterns.
+- Lets users toggle password visibility while typing.
+- Calculates a sample cracking-time estimate using a fixed reference rate of 10 billion guesses per second.
 
-## Technology
+## Stack
 
-- Next.js App Router
-- React and TypeScript
-- Tailwind CSS
+- Next.js App Router and React 19
+- TypeScript
+- Tailwind CSS 4
 - Motion
 - Lucide React
 
 ## Run locally
 
-Install Node.js and npm, then run:
+Requirements: Node.js 22 or newer and npm.
 
 ```bash
 git clone https://github.com/ridhorezkyanwar/password-entropy-visualizer.git
@@ -44,17 +41,17 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Useful commands
+## Verification commands
 
 ```bash
 npm run lint
 npm run build
 ```
 
-These commands use the scripts defined in `package.json`; whether they pass depends on the local environment and current code.
+These are the lint and production-build scripts currently defined in `package.json`. No dedicated automated test script is currently defined there.
 
-## Important limitations
+## Important limitations and privacy
 
-This is an educational estimate, not a guarantee of real-world password strength. The formula assumes characters are selected from the detected character set in a way that can be modelled as random; manually chosen passwords often have less entropy than the estimate suggests. Actual cracking time varies with the hashing algorithm, attack method, hardware, and rate limits.
+The entropy figure is an estimate, not a guarantee of real-world password strength. It assumes a character set and a level of randomness that human-chosen passwords often do not meet. Actual cracking time depends on the password-hashing algorithm, attack strategy, hardware, and rate limits; the displayed reference rate is illustrative, not a prediction of a specific attack.
 
-The current analyzer runs in the browser component and does not send the entered password to an application API. For demonstrations, use a sample password rather than a password you use for a real account.
+The current analysis component calculates results in the browser and does not call an application API to submit the typed password. Still, use a sample password for demonstrations rather than a password you use for a real account.
