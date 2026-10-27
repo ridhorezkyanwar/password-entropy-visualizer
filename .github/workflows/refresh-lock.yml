@@ -1,0 +1,66 @@
+name: Refresh and verify dependency lockfile
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "package.json"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dependency-lock-refresh-main
+  cancel-in-progress: false
+
+jobs:
+  refresh-lock-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: true
+      - name: Set up Node.js
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: 24
+          cache: npm
+      - name: Regenerate lockfile from declared versions
+        run: npm install --package-lock-only --ignore-scripts
+      - name: Apply non-breaking npm security fixes
+        run: npm audit fix --ignore-scripts
+      - name: Install from the regenerated lockfile
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Type-check
+        run: npx tsc --noEmit
+      - name: Test password analysis
+        run: npm test
+      - name: Build production app
+        run: npm run build
+      - name: Report remaining dependency advisories
+        shell: bash
+        run: |
+          npm audit --json > npm-audit.json || true
+          node <<'NODE'
+          const audit = require("./npm-audit.json");
+          console.log("Remaining advisory counts:", JSON.stringify(audit.metadata?.vulnerabilities ?? {}));
+          for (const [name, item] of Object.entries(audit.vulnerabilities ?? {})) {
+            console.log(`${item.severity.toUpperCase()} ${name} ${item.range} fixAvailable=${JSON.stringify(item.fixAvailable)}`);
+          }
+          NODE
+      - name: Commit verified lockfile changes
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          if git diff --cached --quiet; then
+            echo "Lockfile is already synchronized; no commit needed."
+          else
+            git commit -m "fix: refresh dependency lockfile and apply safe audit fixes"
+            git push origin HEAD:main
+          fi
