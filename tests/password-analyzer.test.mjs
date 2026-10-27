@@ -23,7 +23,7 @@ test("detects uppercase, numbers, and symbols without sending input remotely", (
   assert.equal(result.charsetSize, 26 + 10 + 33);
   assert.ok(result.characterSets.includes("Uppercase (A-Z)"));
   assert.ok(result.characterSets.includes("Numbers (0-9)"));
-  assert.ok(result.characterSets.includes("Symbols (!@#$...)"));
+  assert.ok(result.characterSets.includes("Symbols and spaces (printable ASCII)"));
 });
 
 test("flags repeated characters, sequences, and common password fragments", () => {
