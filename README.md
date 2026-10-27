@@ -55,3 +55,11 @@ Run the automated checks with `npm run lint`, `npm test`, `npx tsc --noEmit`, an
 The entropy figure is a simplified estimate, not a guarantee of real-world password strength. It assumes independent, uniformly random printable-ASCII characters; human-chosen passwords often violate that assumption. Inputs containing Unicode or control characters are explicitly marked as unsupported rather than assigned a misleading ASCII estimate. The displayed time is an illustrative expected-average brute-force estimate at a fixed 10-billion-guesses-per-second reference rate, not a prediction for a particular hashing algorithm, hardware, attacker, or account.
 
 The current analysis component calculates results in the browser and does not call an application API to submit the typed password. Still, use a sample password for demonstrations rather than a password you use for a real account.
+
+
+## Security and estimation limits
+
+- Production dependencies are audited in CI; lint, type checks, unit tests, and a production build must pass before a change is considered verified.
+- Password analysis runs locally in the browser. The app does not send the entered password to its server or an external API.
+- Entropy is a simplified model for printable ASCII only. Unicode/control-character inputs are explicitly marked as unsupported rather than assigned an unreliable estimate.
+- The displayed time is illustrative and depends on the assumed attack rate and password-generation assumptions. It is not a guarantee of password safety.
