@@ -22,6 +22,7 @@ const strengthConfig: Record<PasswordStrength, { color: string; label: string; e
   fair: { color: "from-yellow-500 to-orange-500", label: "FAIR", emoji: "😐" },
   strong: { color: "from-green-500 to-emerald-500", label: "STRONG", emoji: "💪" },
   "very-strong": { color: "from-blue-500 to-purple-500", label: "VERY STRONG", emoji: "🛡️" },
+  unsupported: { color: "from-gray-500 to-gray-600", label: "NOT ESTIMATED", emoji: "⚠️" },
 };
 
 export default function PasswordAnalyzer() {
@@ -106,7 +107,7 @@ export default function PasswordAnalyzer() {
                 <div className="w-full bg-gray-800 rounded-full h-4 overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
-                    animate={{ width: `${Math.min((analysis.entropy / 128) * 100, 100)}%` }}
+                    animate={{ width: `${analysis.estimationSupported ? Math.min((analysis.entropy / 128) * 100, 100) : 0}%` }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
                     className={`h-full bg-linear-to-r ${config.color}`}
                   />
@@ -118,12 +119,12 @@ export default function PasswordAnalyzer() {
                 <StatCard
                   icon={<Binary className="w-5 h-5" />}
                   label="Entropy"
-                  value={`${analysis.entropy.toFixed(1)}`}
+                  value={analysis.estimationSupported ? analysis.entropy.toFixed(1) : "—"}
                   unit="bits"
                 />
                 <StatCard
                   icon={<Zap className="w-5 h-5" />}
-                  label="Crack Time"
+                  label="Avg. Crack Time"
                   value={analysis.crackTime}
                   unit="@ 10B/s"
                   highlight
@@ -131,16 +132,27 @@ export default function PasswordAnalyzer() {
                 <StatCard
                   icon={<Gauge className="w-5 h-5" />}
                   label="Length"
-                  value={`${password.length}`}
+                  value={`${Array.from(password).length}`}
                   unit="chars"
                 />
                 <StatCard
                   icon={<Fingerprint className="w-5 h-5" />}
                   label="Charset"
-                  value={`${analysis.charsetSize}`}
+                  value={analysis.estimationSupported ? `${analysis.charsetSize}` : "—"}
                   unit="symbols"
                 />
               </div>
+
+              {!analysis.estimationSupported && (
+                <p
+                  role="status"
+                  className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-4 text-sm text-yellow-100"
+                >
+                  Model ini hanya menghitung karakter ASCII yang dapat dicetak. Karena input berisi
+                  karakter di luar rentang tersebut, entropi dan waktu cracking tidak diperkirakan.
+                  Password tetap diproses di browser dan tidak dikirim ke API aplikasi.
+                </p>
+              )}
 
               {/* Character Sets */}
               <div className="p-6 bg-gray-900/50 border border-gray-800 rounded-xl">
